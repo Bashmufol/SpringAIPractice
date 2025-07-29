@@ -1,5 +1,6 @@
 package com.bash.springaipractice.controller;
 
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,9 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/openai")
 public class OpenAIController {
-
+    private final OpenAiChatModel chatModel;
+    public OpenAIController(OpenAiChatModel chatModel) {
+        this.chatModel = chatModel;
+    }
     @GetMapping("/{message}")
     public ResponseEntity<String> getAnswer(@PathVariable String message){
-        return  ResponseEntity.ok().body("Hello World");
+        String response = chatModel.call(message);
+        return  ResponseEntity.ok().body(response);
     }
 }
